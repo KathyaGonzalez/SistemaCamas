@@ -98,12 +98,10 @@ public class Login extends javax.swing.JFrame {
         jSeparator2.setBackground(new java.awt.Color(206, 206, 206));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 220, 10));
 
-        fSButtonMD1.setBackground(new java.awt.Color(153, 204, 255));
         fSButtonMD1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        fSButtonMD1.setForeground(new java.awt.Color(153, 204, 255));
         fSButtonMD1.setText("X");
         fSButtonMD1.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD1.setColorNormal(new java.awt.Color(153, 204, 255));
+        fSButtonMD1.setColorNormal(new java.awt.Color(102, 153, 255));
         fSButtonMD1.setColorPressed(new java.awt.Color(102, 153, 255));
         fSButtonMD1.setColorTextNormal(new java.awt.Color(0, 0, 0));
         fSButtonMD1.setColorTextPressed(new java.awt.Color(0, 0, 0));
@@ -116,9 +114,8 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(fSButtonMD1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 30));
 
         fSButtonMD2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        fSButtonMD2.setForeground(new java.awt.Color(153, 204, 255));
         fSButtonMD2.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD2.setColorNormal(new java.awt.Color(153, 204, 255));
+        fSButtonMD2.setColorNormal(new java.awt.Color(102, 153, 255));
         fSButtonMD2.setColorPressed(new java.awt.Color(102, 153, 255));
         fSButtonMD2.setColorTextNormal(new java.awt.Color(0, 0, 0));
         fSButtonMD2.setColorTextPressed(new java.awt.Color(0, 0, 0));
@@ -178,9 +175,9 @@ public class Login extends javax.swing.JFrame {
 
     private void fSButtonMD2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD2ActionPerformed
         // TODO add your handling code here:
-       Inventario inventario = new Inventario();
-       inventario.setVisible(true);
-       this.dispose();
+       Principal principal = new Principal();
+        principal.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     /**

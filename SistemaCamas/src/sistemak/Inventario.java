@@ -73,7 +73,7 @@ public class Inventario extends javax.swing.JFrame {
         fSButtonMD1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD1.setText("X");
         fSButtonMD1.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD1.setColorNormal(new java.awt.Color(153, 204, 255));
+        fSButtonMD1.setColorNormal(new java.awt.Color(102, 153, 255));
         fSButtonMD1.setColorPressed(new java.awt.Color(102, 153, 255));
         fSButtonMD1.setColorTextNormal(new java.awt.Color(0, 0, 0));
         fSButtonMD1.setColorTextPressed(new java.awt.Color(0, 0, 0));
@@ -88,7 +88,7 @@ public class Inventario extends javax.swing.JFrame {
         fSButtonMD2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD2.setText("Seleccionar");
         fSButtonMD2.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD2.setColorNormal(new java.awt.Color(153, 204, 255));
+        fSButtonMD2.setColorNormal(new java.awt.Color(102, 153, 255));
         fSButtonMD2.setColorPressed(new java.awt.Color(102, 153, 255));
         fSButtonMD2.setColorTextNormal(new java.awt.Color(0, 0, 0));
         fSButtonMD2.setColorTextPressed(new java.awt.Color(0, 0, 0));
@@ -183,7 +183,7 @@ public class Inventario extends javax.swing.JFrame {
         fSButtonMD3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD3.setText("Buscar");
         fSButtonMD3.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD3.setColorNormal(new java.awt.Color(153, 204, 255));
+        fSButtonMD3.setColorNormal(new java.awt.Color(102, 153, 255));
         fSButtonMD3.setColorPressed(new java.awt.Color(102, 153, 255));
         fSButtonMD3.setColorTextNormal(new java.awt.Color(0, 0, 0));
         fSButtonMD3.setColorTextPressed(new java.awt.Color(0, 0, 0));
@@ -211,7 +211,9 @@ public class Inventario extends javax.swing.JFrame {
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        this.dispose();
+        Principal principal = new Principal();
+        principal.setVisible(true);
     }//GEN-LAST:event_fSButtonMD1ActionPerformed
 
     private void fSButtonMD2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD2ActionPerformed
