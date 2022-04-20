@@ -46,15 +46,15 @@ public class Inventario extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         fSButtonMD1 = new LIB.FSButtonMD();
         fSButtonMD2 = new LIB.FSButtonMD();
-        Estilo = new javax.swing.JComboBox<>();
-        Productos1 = new javax.swing.JComboBox<>();
-        Color = new javax.swing.JComboBox<>();
-        Tamaño1 = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         fSButtonMD3 = new LIB.FSButtonMD();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jComboBox4 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -99,54 +99,6 @@ public class Inventario extends javax.swing.JFrame {
             }
         });
         jPanel1.add(fSButtonMD2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 320, 120, 30));
-
-        Estilo.setBackground(new java.awt.Color(153, 204, 255));
-        Estilo.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        Estilo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar estilo" }));
-        Estilo.setBorder(null);
-        Estilo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Estilo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EstiloActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Estilo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 170, -1));
-
-        Productos1.setBackground(new java.awt.Color(153, 204, 255));
-        Productos1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        Productos1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar producto" }));
-        Productos1.setBorder(null);
-        Productos1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Productos1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Productos1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Productos1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 170, -1));
-
-        Color.setBackground(new java.awt.Color(153, 204, 255));
-        Color.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        Color.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar color" }));
-        Color.setBorder(null);
-        Color.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Color.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ColorActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Color, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 170, -1));
-
-        Tamaño1.setBackground(new java.awt.Color(153, 204, 255));
-        Tamaño1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        Tamaño1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar tamaño" }));
-        Tamaño1.setBorder(null);
-        Tamaño1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Tamaño1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Tamaño1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Tamaño1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 170, -1));
 
         jTable1.setBackground(new java.awt.Color(153, 204, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -195,6 +147,18 @@ public class Inventario extends javax.swing.JFrame {
         });
         jPanel1.add(fSButtonMD3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 120, 30));
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Producto" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 170, -1));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Color" }));
+        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 170, -1));
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Tamaño" }));
+        jPanel1.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 170, -1));
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Estilo" }));
+        jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 170, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,24 +185,14 @@ public class Inventario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
-    private void Productos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Productos1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Productos1ActionPerformed
-
-    private void ColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ColorActionPerformed
-
-    private void Tamaño1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tamaño1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Tamaño1ActionPerformed
-
-    private void EstiloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EstiloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EstiloActionPerformed
-
     private void fSButtonMD3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD3ActionPerformed
-        // TODO add your handling code here:
+        String query = "SELECT FROM producto WHERE ";
+        String sentencia= "";
+        if(jComboBox1.getSelectedIndex()>0){
+            sentencia = (String) jComboBox1.getSelectedItem();
+            query= query + "";
+        }
+        
     }//GEN-LAST:event_fSButtonMD3ActionPerformed
 
     /**
@@ -278,13 +232,13 @@ public class Inventario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> Color;
-    private javax.swing.JComboBox<String> Estilo;
-    private javax.swing.JComboBox<String> Productos1;
-    private javax.swing.JComboBox<String> Tamaño1;
     private LIB.FSButtonMD fSButtonMD1;
     private LIB.FSButtonMD fSButtonMD2;
     private LIB.FSButtonMD fSButtonMD3;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

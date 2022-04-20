@@ -10,13 +10,19 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
+// para la base de datos
+import Conex.Conexion;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 /**
  *
  * @author gonzc
  */
 public class Login extends javax.swing.JFrame {
-
+    Conexion c= new Conexion();
     /**
      * Creates new form Login
      */
@@ -50,12 +56,11 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        Nombre = new javax.swing.JTextField();
-        jSeparator2 = new javax.swing.JSeparator();
         fSButtonMD1 = new LIB.FSButtonMD();
         fSButtonMD2 = new LIB.FSButtonMD();
-        fSPasswordFieldMD1 = new LIB.FSPasswordFieldMD();
         jLabel5 = new javax.swing.JLabel();
+        contraseña = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -77,26 +82,6 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
         jLabel4.setText("Contraseña");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
-
-        Nombre.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        Nombre.setForeground(new java.awt.Color(153, 153, 153));
-        Nombre.setText("Ingrese su usuario");
-        Nombre.setBorder(null);
-        Nombre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        Nombre.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                NombreMousePressed(evt);
-            }
-        });
-        Nombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NombreActionPerformed(evt);
-            }
-        });
-        jPanel1.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 230, -1));
-
-        jSeparator2.setBackground(new java.awt.Color(206, 206, 206));
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 220, 10));
 
         fSButtonMD1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD1.setText("X");
@@ -128,16 +113,11 @@ public class Login extends javax.swing.JFrame {
         });
         jPanel1.add(fSButtonMD2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, -1, -1));
 
-        fSPasswordFieldMD1.setForeground(new java.awt.Color(0, 0, 0));
-        fSPasswordFieldMD1.setBordeColorFocus(new java.awt.Color(224, 224, 224));
-        fSPasswordFieldMD1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        fSPasswordFieldMD1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        fSPasswordFieldMD1.setPlaceholder("Ingrese su contraseña");
-        jPanel1.add(fSPasswordFieldMD1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 220, -1));
-
         jLabel5.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
         jLabel5.setText("Usuario");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
+        jPanel1.add(contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 210, -1));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,29 +135,24 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void NombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreActionPerformed
-        // TODO add your handling code here:
-       
-    }//GEN-LAST:event_NombreActionPerformed
-
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_fSButtonMD1ActionPerformed
 
-    private void NombreMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NombreMousePressed
-        // TODO add your handling code here:
-         if(this.Nombre.getText().equals("Ingrese su usuario")){
-           this.Nombre.setText("");
-           this.Nombre.setForeground(Color.black);
-        }
-    }//GEN-LAST:event_NombreMousePressed
-
     private void fSButtonMD2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD2ActionPerformed
         // TODO add your handling code here:
-       Principal principal = new Principal();
-        principal.setVisible(true);
-        this.dispose();
+        c.conector(); 
+        this.setVisible(false);
+        if(c.Login(jTextField1.getText(), this.contraseña.getText())== 1){
+            Principal principal = new Principal();
+            principal.setVisible(true);
+            this.dispose();
+        }
+        else{
+            this.setVisible(true);
+        }
+       
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     /**
@@ -216,16 +191,15 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Nombre;
+    private javax.swing.JTextField contraseña;
     private LIB.FSButtonMD fSButtonMD1;
     private LIB.FSButtonMD fSButtonMD2;
-    private LIB.FSPasswordFieldMD fSPasswordFieldMD1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
