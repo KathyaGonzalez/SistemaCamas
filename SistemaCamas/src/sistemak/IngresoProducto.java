@@ -12,33 +12,43 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-
+// para la base de datos
+import Conex.Conexion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Usuario 1
  */
 public class IngresoProducto extends javax.swing.JFrame {
-
+Conexion c= new Conexion();
+PreparedStatement ps;
+ResultSet rs;
+ResultSetMetaData rsm;
+DefaultTableModel dtm;
     /**
      * Creates new form IngresoMaterial
      */
-    DefaultTableModel modelo;
-    DefaultComboBoxModel productos;
-    DefaultComboBoxModel colores;
-    DefaultComboBoxModel tamanios;
-    DefaultComboBoxModel estilos;
+    
     public IngresoProducto() {
         initComponents();
-        modelo = (DefaultTableModel) jTable1.getModel();
-        productos = (DefaultComboBoxModel) jComboBox1.getModel();
-        colores = (DefaultComboBoxModel) jComboBox2.getModel();
-        tamanios = (DefaultComboBoxModel) jComboBox3.getModel();
-        estilos = (DefaultComboBoxModel) jComboBox4.getModel();
+         c.conector();
+         jTextField1.setText("");
+        jTextField1.setEnabled(false);
         this.setLocationRelativeTo(null);
         this.jLabel2.setText(" ");
        ImageIcon imagen = new ImageIcon("src/Imagenes/2.jpg");
        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( this.jLabel2.getWidth(),  this.jLabel2.getHeight(), Image.SCALE_DEFAULT));
        this.jLabel2.setIcon(icono);
+        this.jComboBox1.setModel(c.Obt_Pro());
+       this.jComboBox2.setModel(c.Obt_Color());
+       this.jComboBox4.setModel(c.Obt_Estilo());
     }
 
     /**
@@ -66,21 +76,19 @@ public class IngresoProducto extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         fSButtonMD1 = new LIB.FSButtonMD();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         fSButtonMD3 = new LIB.FSButtonMD();
         jSpinner1 = new javax.swing.JSpinner();
+        fSButtonMD4 = new LIB.FSButtonMD();
+        jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
-        fSButtonMD4 = new LIB.FSButtonMD();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -110,17 +118,13 @@ public class IngresoProducto extends javax.swing.JFrame {
         });
         jPanel1.add(fSButtonMD1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 30));
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel3.setText("Nombre:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 94, -1, -1));
-
         jLabel4.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         jLabel4.setText("INGRESO DE PRODUCTO");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 50, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel5.setText("Cantidad:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
+        jLabel5.setText("Precio");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, -1, -1));
 
         jTable1.setBackground(new java.awt.Color(153, 204, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -139,7 +143,7 @@ public class IngresoProducto extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 460, 140));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 520, 140));
 
         fSButtonMD3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD3.setText("Ingresar");
@@ -154,51 +158,11 @@ public class IngresoProducto extends javax.swing.JFrame {
                 fSButtonMD3ActionPerformed(evt);
             }
         });
-        jPanel1.add(fSButtonMD3, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 145, 120, 30));
+        jPanel1.add(fSButtonMD3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, 120, 30));
 
         jSpinner1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
         jSpinner1.setBorder(null);
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 100, -1));
-
-        jComboBox1.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox1.setEditable(true);
-        jComboBox1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jComboBox1.setBorder(null);
-        jComboBox1.setRequestFocusEnabled(true);
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 110, 100, -1));
-
-        jComboBox2.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox2.setEditable(true);
-        jComboBox2.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jComboBox2.setBorder(null);
-        jComboBox2.setRequestFocusEnabled(true);
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 100, -1));
-
-        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel6.setText("Color:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, -1, -1));
-
-        jComboBox3.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox3.setEditable(true);
-        jComboBox3.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jComboBox3.setBorder(null);
-        jComboBox3.setRequestFocusEnabled(true);
-        jPanel1.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 100, -1));
-
-        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel7.setText("Tamaño");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, -1, -1));
-
-        jComboBox4.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox4.setEditable(true);
-        jComboBox4.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jComboBox4.setBorder(null);
-        jComboBox4.setRequestFocusEnabled(true);
-        jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, 100, -1));
-
-        jLabel8.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel8.setText("Estilo:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, -1, -1));
+        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 70, -1));
 
         fSButtonMD4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD4.setText("Fotografía");
@@ -213,32 +177,44 @@ public class IngresoProducto extends javax.swing.JFrame {
                 fSButtonMD4ActionPerformed(evt);
             }
         });
-        jPanel1.add(fSButtonMD4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 145, 120, 30));
+        jPanel1.add(fSButtonMD4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, 100, 30));
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 80, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 160, -1));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 160, -1));
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 100, 160, -1));
+
+        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel6.setText("Cantidad:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 80, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void fSButtonMD3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD3ActionPerformed
-        // TODO add your handling code here:
-        ActualizaBox(jComboBox1, productos);
-        ActualizaBox(jComboBox2, colores);
-        ActualizaBox(jComboBox3, tamanios);
-        ActualizaBox(jComboBox4, estilos);
-        Producto p = new Producto(jComboBox1.getEditor().getItem().toString(),jComboBox2.getEditor().getItem().toString(), jComboBox3.getEditor().getItem().toString(), jComboBox4.getEditor().getItem().toString(), (int)jSpinner1.getValue());
-        modelo.addRow(new Object[]{p.nombre,p.color,p.tamanio,p.estilo,p.cantidad});
+        if(this.validar()){ // si siempre si se cumplen todas las condiciones
+            String query = "INSERT INTO producto (nombre,color,estilo,fotografia,cantidad,precio) values (\"1234\",\"bryan\",\"2022-4-19\",5000,1)";
+        }
+        
     }//GEN-LAST:event_fSButtonMD3ActionPerformed
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
@@ -257,8 +233,31 @@ public class IngresoProducto extends javax.swing.JFrame {
         JFileChooser imagenChooser = new JFileChooser();
         imagenChooser.showOpenDialog(null);
         File imagen = imagenChooser.getSelectedFile();
+        String ruta = imagen.toString();
+        System.out.println(ruta);
+        this.jTextField1.setText(ruta);
     }//GEN-LAST:event_fSButtonMD4ActionPerformed
-
+    public void eliminar(){
+        DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+        int a = jTable1.getRowCount()-1;
+        for (int i = a; i >= 0; i--) {          
+        tb.removeRow(tb.getRowCount()-1);
+        }
+        //cargaTicket();
+    }
+    public boolean validar(){
+        boolean valido=true;
+        //hay que tratar de ver si no es valido
+        if((jComboBox1.getSelectedIndex() == 0)||(jComboBox2.getSelectedIndex() == 0)||(jComboBox4.getSelectedIndex() == 0)){
+            valido = false;
+        }
+        String prueba = this.jTextField1.getText();
+        String prueba2 = this.jTextField1.getText();
+        if((Integer.parseInt(jSpinner1.getValue().toString()) == 0)||("".equals(prueba))||("".equals(prueba2))){
+            valido =false;
+        }
+        return valido;
+    }
     /**
      * @param args the command line arguments
      */
@@ -300,20 +299,18 @@ public class IngresoProducto extends javax.swing.JFrame {
     private LIB.FSButtonMD fSButtonMD4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -18,7 +20,10 @@ public class Conexion {
     private static final String user="root"; //esto no lo toquen, todo va a ser en root supongo, si alguien le colocó otro usuario pues cambienlo
     private static final String pass="Tr4c30n"; //aquí tiene que ir su contra personal de la bd
     private static final String url="jdbc:mysql://localhost:3306/sistema_camas";
-    
+    public ArrayList<String> listaProductos= new ArrayList();
+    public ArrayList<String> listaColor= new ArrayList();
+    public ArrayList<String> listaTamaño= new ArrayList();
+    public ArrayList<String> listaEstilo= new ArrayList();
     public void conector() {
         try{
             con=null;
@@ -68,7 +73,80 @@ public class Conexion {
         }
         return res;
     }
-    
-    
+    // obtener productos
+    public DefaultComboBoxModel Obt_Pro(){
+        DefaultComboBoxModel ListarDoc = new DefaultComboBoxModel();
+        ListarDoc.addElement("Seleccione un Producto");
+        ResultSet res = this.consulta("SELECT nombre,idProducto FROM producto order By idProducto;");
+        try{
+            while(res.next()){
+                ListarDoc.addElement(res.getString("nombre"));
+                listaProductos.add(res.getString("idProducto"));
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return ListarDoc;
+    }
+    public DefaultComboBoxModel Obt_Color(){
+        DefaultComboBoxModel ListarDoc = new DefaultComboBoxModel();
+        ListarDoc.addElement("Seleccione el Color");
+        ResultSet res = this.consulta("SELECT color,idProducto FROM producto order By idProducto;");
+        try{
+            while(res.next()){
+                ListarDoc.addElement(res.getString("color"));
+                listaColor.add(res.getString("idProducto"));
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return ListarDoc;
+    }
+    public DefaultComboBoxModel Obt_Tamaño(){
+        DefaultComboBoxModel ListarDoc = new DefaultComboBoxModel();
+        ListarDoc.addElement("Seleccione el Tamaño");
+        ResultSet res = this.consulta("SELECT tamaño,idProducto FROM producto order By idProducto;");
+        try{
+            while(res.next()){
+                ListarDoc.addElement(res.getString("tamaño"));
+                listaTamaño.add(res.getString("idProducto"));
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return ListarDoc;
+    }
+    public DefaultComboBoxModel Obt_Estilo(){
+        DefaultComboBoxModel ListarDoc = new DefaultComboBoxModel();
+        ListarDoc.addElement("Seleccione el Estilo");
+        ResultSet res = this.consulta("SELECT estilo,idProducto FROM producto order By idProducto;");
+        try{
+            while(res.next()){
+                ListarDoc.addElement(res.getString("estilo"));
+                listaEstilo.add(res.getString("idProducto"));
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return ListarDoc;
+    }
+    //Consultar por ruta de imagen
+    public String consultaImg (String sql){
+        String direccion="";
+        ResultSet res = this.consulta(sql);
+        try{
+            while(res.next()){
+                direccion= res.getString("fotografia");
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return direccion;
+    }
     
 }
