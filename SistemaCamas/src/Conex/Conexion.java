@@ -24,6 +24,8 @@ public class Conexion {
     public ArrayList<String> listaColor= new ArrayList();
     public ArrayList<String> listaTamaño= new ArrayList();
     public ArrayList<String> listaEstilo= new ArrayList();
+    public ArrayList<String> listaMat= new ArrayList();
+    public ArrayList<Integer> listaExistencia= new ArrayList();
     public void conector() {
         try{
             con=null;
@@ -133,6 +135,22 @@ public class Conexion {
             System.err.println(ex.getMessage());
         }
         return ListarDoc;
+    }
+    public DefaultComboBoxModel Obt_Mat(){
+        DefaultComboBoxModel ListarMat = new DefaultComboBoxModel();
+        ListarMat.addElement("Seleccione el Material");
+        ResultSet res = this.consulta("SELECT nombre,idMaterial,existencia FROM material order By idMaterial;");
+        try{
+            while(res.next()){
+                ListarMat.addElement(res.getString("nombre"));
+                listaMat.add(res.getString("nombre"));
+                listaExistencia.add(res.getInt("existencia"));
+            }
+            res.close();
+        }catch(SQLException ex){
+            System.err.println(ex.getMessage());
+        }
+        return ListarMat;
     }
     //Consultar por ruta de imagen
     public String consultaImg (String sql){
