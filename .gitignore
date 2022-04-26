@@ -24,3 +24,4 @@ hs_err_pid*
 replay_pid*
 /SistemaCamas/build/
 /SistemaCamas/nbproject/private/
+/SistemaCamas/dist/

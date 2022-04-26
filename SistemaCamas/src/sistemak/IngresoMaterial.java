@@ -4,10 +4,20 @@
  */
 package sistemak;
 
+import Conex.Conexion;
 import java.awt.Image;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,17 +28,29 @@ public class IngresoMaterial extends javax.swing.JFrame {
     /**
      * Creates new form IngresoMaterial
      */
+    Conexion c = new Conexion();
     DefaultTableModel modelo;
-    DefaultComboBoxModel materiales;
+    PreparedStatement ps;
+    ResultSet rs;
+    ResultSetMetaData rsm;
+    DefaultTableModel dtm;
+
     public IngresoMaterial() {
+        c.conector();
         initComponents();
-        modelo = (DefaultTableModel) jTable1.getModel();
-        materiales = (DefaultComboBoxModel) jComboBox1.getModel();
+        modelo = (DefaultTableModel) MaterialDatos.getModel();
         this.setLocationRelativeTo(null);
         this.jLabel2.setText(" ");
-       ImageIcon imagen = new ImageIcon("src/Imagenes/2.jpg");
-       Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( this.jLabel2.getWidth(),  this.jLabel2.getHeight(), Image.SCALE_DEFAULT));
-       this.jLabel2.setIcon(icono);
+        ImageIcon imagen = new ImageIcon("src/Imagenes/2.jpg");
+        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( this.jLabel2.getWidth(),  this.jLabel2.getHeight(), Image.SCALE_DEFAULT));
+        this.jLabel2.setIcon(icono);
+        
+        //Texto y Boton actualizar Bloqueados
+        this.TextActualizar.setEnabled(false);
+        this.TextCodigo.setEnabled(false);
+        this.BnActualizar.setEnabled(false);
+        //Imprimir tabla desde el inicio
+        MostrarTabla();
     }
     
 
@@ -49,11 +71,19 @@ public class IngresoMaterial extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        fSButtonMD3 = new LIB.FSButtonMD();
-        jSpinner1 = new javax.swing.JSpinner();
+        MaterialDatos = new javax.swing.JTable();
+        BnActualizar = new LIB.FSButtonMD();
         fSButtonMD1 = new LIB.FSButtonMD();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        BnIngresar = new LIB.FSButtonMD();
+        refresh = new javax.swing.JButton();
+        TextNombre = new javax.swing.JTextField();
+        TextActualizar = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        TextCodigo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        TextPrecio = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        TextCantidad = new javax.swing.JTextField();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -69,54 +99,58 @@ public class IngresoMaterial extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 0, 150, 60));
 
         jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel3.setText("Nombre:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 94, -1, -1));
+        jLabel3.setText("Código:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         jLabel4.setText("INGRESO DE MATERIAL");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel5.setText("Cantidad:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 124, -1, -1));
+        jLabel5.setText("Actualizar Cantidad:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 160, -1, -1));
 
-        jTable1.setBackground(new java.awt.Color(153, 204, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        MaterialDatos.setBackground(new java.awt.Color(153, 204, 255));
+        MaterialDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nombre", "Cantidad"
+                "Código", "Nombre", "Cantidad", "Precio"
             }
-        ));
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        MaterialDatos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        MaterialDatos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                MaterialDatosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(MaterialDatos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 380, 140));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 390, 140));
 
-        fSButtonMD3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        fSButtonMD3.setText("Ingresar");
-        fSButtonMD3.setColorHover(new java.awt.Color(153, 204, 255));
-        fSButtonMD3.setColorNormal(new java.awt.Color(102, 153, 255));
-        fSButtonMD3.setColorPressed(new java.awt.Color(102, 153, 255));
-        fSButtonMD3.setColorTextNormal(new java.awt.Color(0, 0, 0));
-        fSButtonMD3.setColorTextPressed(new java.awt.Color(0, 0, 0));
-        fSButtonMD3.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        fSButtonMD3.addActionListener(new java.awt.event.ActionListener() {
+        BnActualizar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        BnActualizar.setText("Actualizar");
+        BnActualizar.setColorHover(new java.awt.Color(153, 204, 255));
+        BnActualizar.setColorNormal(new java.awt.Color(102, 153, 255));
+        BnActualizar.setColorPressed(new java.awt.Color(102, 153, 255));
+        BnActualizar.setColorTextNormal(new java.awt.Color(0, 0, 0));
+        BnActualizar.setColorTextPressed(new java.awt.Color(0, 0, 0));
+        BnActualizar.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
+        BnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fSButtonMD3ActionPerformed(evt);
+                BnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(fSButtonMD3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 120, 30));
-
-        jSpinner1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jSpinner1.setBorder(null);
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 70, -1));
+        jPanel1.add(BnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 120, 30));
 
         fSButtonMD1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD1.setText("X");
@@ -133,56 +167,110 @@ public class IngresoMaterial extends javax.swing.JFrame {
         });
         jPanel1.add(fSButtonMD1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 30));
 
-        jComboBox1.setBackground(new java.awt.Color(153, 204, 255));
-        jComboBox1.setEditable(true);
-        jComboBox1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
-        jComboBox1.setToolTipText("");
-        jComboBox1.setAutoscrolls(true);
-        jComboBox1.setBorder(null);
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, -1, -1));
+        BnIngresar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        BnIngresar.setText("Ingresar");
+        BnIngresar.setColorHover(new java.awt.Color(153, 204, 255));
+        BnIngresar.setColorNormal(new java.awt.Color(102, 153, 255));
+        BnIngresar.setColorPressed(new java.awt.Color(102, 153, 255));
+        BnIngresar.setColorTextNormal(new java.awt.Color(0, 0, 0));
+        BnIngresar.setColorTextPressed(new java.awt.Color(0, 0, 0));
+        BnIngresar.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
+        BnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BnIngresarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, 120, 30));
+
+        refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/actualizar.png"))); // NOI18N
+        refresh.setBorder(null);
+        refresh.setBorderPainted(false);
+        refresh.setContentAreaFilled(false);
+        refresh.setFocusPainted(false);
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+        jPanel1.add(refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, -1, -1));
+        jPanel1.add(TextNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 310, -1));
+        jPanel1.add(TextActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 80, -1));
+
+        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel7.setText("Precio:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        jPanel1.add(TextCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 90, -1));
+
+        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel6.setText("Nombre:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+        jPanel1.add(TextPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 220, -1));
+
+        jLabel8.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel8.setText("Cantidad:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
+        jPanel1.add(TextCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 90, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fSButtonMD3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD3ActionPerformed
+    private void BnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BnActualizarActionPerformed
         // TODO add your handling code here:
-        int cantidad = (int) jSpinner1.getValue();
-        String producto = jComboBox1.getEditor().getItem()+"";
-        boolean existe = false;
-        int posicion=0;
-        /*Verificar si existe*/
-        for (int i = 0; i < materiales.getSize(); i++) {
-            if(materiales.getElementAt(i).equals(jComboBox1.getEditor().getItem())){
-                existe=true;
-                posicion=i;
+        if (VerificarCamposAc()== 0) {
+            try {
+                //Actualizar cantidad de material en BD
+                c.con.setAutoCommit(true);
+                Integer existencian = Integer.parseInt(TextActualizar.getText());
+                Integer codigo = Integer.parseInt(TextCodigo.getText());
+                Statement stmt = c.con.createStatement();
+                String query = "UPDATE material set existencia = " + existencian + " where idMaterial= " + codigo + " ";
+                System.out.print(query);
+                stmt.executeUpdate(query);
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, e.getMessage());
             }
         }
-        /*Si no, se agrega*/
-        if(!existe){
-            modelo.addRow(new Object[]{producto, cantidad});
-            materiales.addElement(producto);
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Asegurese de llenar los campos correctamente");
         }
-        /*De lo contrario se actualiza la informacion*/
-        else{
-            cantidad += Integer.parseInt(modelo.getValueAt(posicion, 1).toString());
-            modelo.setValueAt(cantidad, posicion, 1);
-        }
-    }//GEN-LAST:event_fSButtonMD3ActionPerformed
+        
+        //Reimprimir tabla y vaciar cajas de texto
+        eliminar();
+        Vaciado();
+        MostrarTabla();
+    }//GEN-LAST:event_BnActualizarActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void MaterialDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MaterialDatosMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1MouseClicked
+        
+        //Activar o desactivar elementos
+        this.TextNombre.setEnabled(false);
+        this.TextCantidad.setEnabled(false);
+        this.TextActualizar.setEnabled(true);
+        this.TextPrecio.setEnabled(false);
+        this.BnIngresar.setEnabled(false);
+        this.BnActualizar.setEnabled(true);
+        
+        //Seleccionar datos de la tabla y pasarlos a TextBox
+        int seleccionar=MaterialDatos.rowAtPoint(evt.getPoint());
+        TextCodigo.setText(String.valueOf(MaterialDatos.getValueAt(seleccionar, 0)));
+        TextNombre.setText(String.valueOf(MaterialDatos.getValueAt(seleccionar, 1)));
+        TextCantidad.setText(String.valueOf(MaterialDatos.getValueAt(seleccionar, 2)));
+        TextPrecio.setText(String.valueOf(MaterialDatos.getValueAt(seleccionar, 3)));
+    }//GEN-LAST:event_MaterialDatosMouseClicked
 
     private void fSButtonMD1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD1ActionPerformed
         // TODO add your handling code here:
@@ -191,6 +279,129 @@ public class IngresoMaterial extends javax.swing.JFrame {
         principal.setVisible(true);
     }//GEN-LAST:event_fSButtonMD1ActionPerformed
 
+    private void BnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BnIngresarActionPerformed
+        // TODO add your handling code here:
+        if (VerificarCampos() == 0) {
+            try {
+                //Insertar cantidad de material en BD
+                c.con.setAutoCommit(true);
+                String nombre = TextNombre.getText();
+                Integer existencia = Integer.parseInt(TextCantidad.getText());
+                float precio = Float.valueOf(TextPrecio.getText());
+                Statement stmt = c.con.createStatement();
+                String query = "INSERT INTO material (nombre, existencia, precio) values ('" + nombre + "'," + existencia + "," + precio + ")";
+                System.out.print(query);
+                stmt.executeUpdate(query);
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, e.getMessage());
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Asegurese de llenar los campos correctamente");
+        }
+        //Reimprimir tabla y vaciar cajas de texto
+        eliminar();
+        Vaciado();
+        MostrarTabla();
+        
+    }//GEN-LAST:event_BnIngresarActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        // TODO add your handling code here:
+        
+        //Restablecer todo
+        this.TextNombre.setEnabled(true);
+        this.TextCantidad.setEnabled(true);
+        this.TextActualizar.setEnabled(false);
+        this.TextPrecio.setEnabled(true);
+        this.BnIngresar.setEnabled(true);
+        this.BnActualizar.setEnabled(false);
+        Vaciado();
+    }//GEN-LAST:event_refreshActionPerformed
+
+    
+    public void MostrarTabla() {
+        try {
+
+            //Impresion en orden
+            ps = (PreparedStatement) c.con.prepareStatement("SELECT * FROM sistema_camas.material");
+            rs = ps.executeQuery();
+            rsm = (ResultSetMetaData) rs.getMetaData();
+            ArrayList<Object[]> data = new ArrayList<>();
+            while (rs.next()) {
+                Object[] rows = new Object[rsm.getColumnCount()];
+                for (int i = 0; i < rows.length; i++) {
+                    rows[i] = rs.getObject(i + 1);
+                }
+                data.add(rows);
+            }
+            dtm = (DefaultTableModel) this.MaterialDatos.getModel();
+            for (int i = 0; i < data.size(); i++) {
+                dtm.addRow(data.get(i));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+        
+    }
+    
+    public void eliminar(){
+        DefaultTableModel tb = (DefaultTableModel) MaterialDatos.getModel();
+        int a = MaterialDatos.getRowCount()-1;
+        for (int i = a; i >= 0; i--) {          
+        tb.removeRow(tb.getRowCount()-1);
+        }
+        //cargaTicket();
+    }
+    
+    private void Vaciado()
+    {
+        TextCodigo.setText("");
+        TextNombre.setText("");
+        TextCantidad.setText("");
+        TextActualizar.setText("");
+        TextPrecio.setText("");
+    }
+    
+    int VerificarCampos() {
+        int cero = 0;
+        int si = 0;
+
+        if ("".equals(TextNombre.getText())) {
+            cero++;
+        }
+        if ("".equals(TextCantidad.getText())) {
+            cero++;
+        }
+        if ("".equals(TextPrecio.getText())) {
+            cero++;
+        }
+        return cero;
+    }
+    
+    int VerificarCamposAc() {
+        int cero = 0;
+        int si = 0;
+
+        if ("".equals(TextNombre.getText())) {
+            cero++;
+        }
+        if ("".equals(TextCantidad.getText())) {
+            cero++;
+        }
+        if ("".equals(TextPrecio.getText())) {
+            cero++;
+        }
+        if ("".equals(TextActualizar.getText())) {
+            cero++;
+        }
+        if ("".equals(TextCodigo.getText())) {
+            cero++;
+        }
+        return cero;
+    }
     /**
      * @param args the command line arguments
      */
@@ -228,18 +439,26 @@ public class IngresoMaterial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private LIB.FSButtonMD BnActualizar;
+    private LIB.FSButtonMD BnIngresar;
+    private javax.swing.JTable MaterialDatos;
+    private javax.swing.JTextField TextActualizar;
+    private javax.swing.JTextField TextCantidad;
+    private javax.swing.JTextField TextCodigo;
+    private javax.swing.JTextField TextNombre;
+    private javax.swing.JTextField TextPrecio;
     private LIB.FSButtonMD fSButtonMD1;
-    private LIB.FSButtonMD fSButtonMD3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton refresh;
     // End of variables declaration//GEN-END:variables
 }
