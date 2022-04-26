@@ -16,7 +16,7 @@ public class Conexion {
     public Connection con;
     private static final String driver="com.mysql.jdbc.Driver";
     private static final String user="root"; //esto no lo toquen, todo va a ser en root supongo, si alguien le colocó otro usuario pues cambienlo
-    private static final String pass="Tr4c30n"; //aquí tiene que ir su contra personal de la bd
+    private static final String pass="diegoalej."; //aquí tiene que ir su contra personal de la bd
     private static final String url="jdbc:mysql://localhost:3306/sistema_camas";
     
     public void conector() {
