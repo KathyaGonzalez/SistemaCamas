@@ -10,18 +10,33 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
+// para la base de datos
+import Conex.Conexion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author gonzc
  */
 public class Inventario extends javax.swing.JFrame {
-
+Conexion c= new Conexion();
+PreparedStatement ps;
+ResultSet rs;
+ResultSetMetaData rsm;
+DefaultTableModel dtm;
+boolean x; // me sirve para ver campos en la busqueda
     /**
      * Creates new form Login
      */
     public Inventario() {
        initComponents();
+       c.conector();
        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
@@ -30,6 +45,10 @@ public class Inventario extends javax.swing.JFrame {
        ImageIcon imagen = new ImageIcon("src/Imagenes/2.jpg");
        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance( this.jLabel2.getWidth(),  this.jLabel2.getHeight(), Image.SCALE_DEFAULT));
        this.jLabel2.setIcon(icono);
+       
+       this.jComboBox1.setModel(c.Obt_Pro());
+       this.jComboBox2.setModel(c.Obt_Color());
+       this.jComboBox4.setModel(c.Obt_Estilo());
     }
 
     /**
@@ -48,13 +67,12 @@ public class Inventario extends javax.swing.JFrame {
         fSButtonMD2 = new LIB.FSButtonMD();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         fSButtonMD3 = new LIB.FSButtonMD();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox4 = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -103,34 +121,26 @@ public class Inventario extends javax.swing.JFrame {
         jTable1.setBackground(new java.awt.Color(153, 204, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Producto", "Cantidad", "Precio", "Especificaciones"
+                "Producto", "Cantidad", "Precio", "Color", "Estilo"
             }
         ));
         jTable1.setSelectionBackground(new java.awt.Color(153, 204, 255));
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 430, 210));
-
-        jLabel1.setText("Fotografia");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 430, 70));
-
-        jLabel4.setFont(new java.awt.Font("Calibri Light", 1, 24)); // NOI18N
-        jLabel4.setText("Fotografía");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, -1, -1));
 
         fSButtonMD3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         fSButtonMD3.setText("Buscar");
@@ -148,16 +158,30 @@ public class Inventario extends javax.swing.JFrame {
         jPanel1.add(fSButtonMD3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 120, 30));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Producto" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 170, -1));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 170, -1));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Color" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 170, -1));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Tamaño" }));
-        jPanel1.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 170, -1));
+        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 170, -1));
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Estilo" }));
         jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 170, -1));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 330, 200, 100));
+
+        jLabel1.setText("Fotografia");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, 80, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -186,15 +210,82 @@ public class Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_fSButtonMD2ActionPerformed
 
     private void fSButtonMD3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSButtonMD3ActionPerformed
-        String query = "SELECT FROM producto WHERE ";
-        String sentencia= "";
-        if(jComboBox1.getSelectedIndex()>0){
-            sentencia = (String) jComboBox1.getSelectedItem();
-            query= query + "";
+        String query = "SELECT nombre,cantidad,precio,color,estilo FROM producto WHERE ";
+        String sentencia = "";
+        x=false;
+        query = this.obtenerQuery(query, sentencia);
+        if (x == true) {
+            String direccion="";
+            eliminar();
+            System.out.println(query);
+            try {
+                //Impresion en orden
+                ps = (PreparedStatement) c.con.prepareStatement(query);
+                rs = ps.executeQuery();
+                rsm = (ResultSetMetaData) rs.getMetaData();
+                ArrayList<Object[]> data = new ArrayList<>();
+                while (rs.next()) {
+                    Object[] rows = new Object[rsm.getColumnCount()];
+                    for (int i = 0; i < rows.length; i++) {
+                        rows[i] = rs.getObject(i + 1);
+                    }
+                    data.add(rows);
+                }
+                dtm = (DefaultTableModel) this.jTable1.getModel();
+                for (int i = 0; i < data.size(); i++) {
+                    dtm.addRow(data.get(i));
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(rootPane, e.getMessage());
+            }
+            // si me la obtiene pero no me la muestra
+            x=false;
+            query = "SELECT fotografia FROM producto WHERE idProducto = 1 and ";
+            sentencia = "";
+            String a = this.obtenerQuery(query, sentencia);
+            System.out.println(a);
+            query = c.consultaImg(a);
+            JLabel foto = new JLabel("");
+            foto.setBounds(jPanel2.getX(), jPanel2.getY(), jPanel2.getWidth(), jPanel2.getHeight());// esto es lo que se buscará corregir para que quede circular
+            ImageIcon imagen = new ImageIcon(query);
+            Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
+            foto.setIcon(icono);
+            this.jPanel2.add(foto);
         }
-        
     }//GEN-LAST:event_fSButtonMD3ActionPerformed
-
+    public String obtenerQuery(String query,String sentencia){
+        if (jComboBox1.getSelectedIndex() > 0) {
+            sentencia = (String) jComboBox1.getSelectedItem();
+            query = query + "nombre = '" + sentencia + "'";
+            x = true;
+        }
+        if (jComboBox2.getSelectedIndex() > 0) {
+            if (x == true) {
+                query = query + " and ";
+            }
+            sentencia = (String) jComboBox2.getSelectedItem();
+            query = query + "color = '" + sentencia + "'";
+            x = true;
+        }
+       
+        if (jComboBox4.getSelectedIndex() > 0) {
+            if (x == true) {
+                query = query + " and ";
+            }
+            sentencia = (String) jComboBox4.getSelectedItem();
+            query = query + "estilo = '" + sentencia + "'";
+            x = true;
+        }
+        return query;
+    }
+    public void eliminar(){
+        DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+        int a = jTable1.getRowCount()-1;
+        for (int i = a; i >= 0; i--) {          
+        tb.removeRow(tb.getRowCount()-1);
+        }
+        //cargaTicket();
+    }
     /**
      * @param args the command line arguments
      */
@@ -237,13 +328,12 @@ public class Inventario extends javax.swing.JFrame {
     private LIB.FSButtonMD fSButtonMD3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

@@ -235,7 +235,7 @@ public class IngresoMaterial extends javax.swing.JFrame {
                 Integer codigo = Integer.parseInt(TextCodigo.getText());
                 Statement stmt = c.con.createStatement();
                 String query = "UPDATE material set existencia = " + existencian + " where idMaterial= " + codigo + " ";
-                System.out.print(query);
+//                System.out.print(query);
                 stmt.executeUpdate(query);
 
             } catch (SQLException e) {
@@ -290,7 +290,7 @@ public class IngresoMaterial extends javax.swing.JFrame {
                 float precio = Float.valueOf(TextPrecio.getText());
                 Statement stmt = c.con.createStatement();
                 String query = "INSERT INTO material (nombre, existencia, precio) values ('" + nombre + "'," + existencia + "," + precio + ")";
-                System.out.print(query);
+//                System.out.print(query);
                 stmt.executeUpdate(query);
 
             } catch (SQLException e) {
